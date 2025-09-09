@@ -1,6 +1,7 @@
 package com.taskmanagement.salesflowx.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.taskmanagement.salesflowx.utils.Status;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -28,9 +29,11 @@ public class Task {
     private Status status;
 
     @CreatedDate
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private Date createdAt;
 
     @LastModifiedDate
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private Date updatedAt;
 
 

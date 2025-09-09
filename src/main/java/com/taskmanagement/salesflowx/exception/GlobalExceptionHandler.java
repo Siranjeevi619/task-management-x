@@ -1,8 +1,8 @@
 package com.taskmanagement.salesflowx.exception;
 
 
-import com.taskmanagement.salesflowx.utils.ApiResponse;
 import com.taskmanagement.salesflowx.utils.ApiStatus;
+import com.taskmanagement.salesflowx.utils.CommonResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(TaskNotFoundException.class)
-    public ResponseEntity<ApiResponse> handleException(TaskNotFoundException exception) {
-        ApiResponse apiResponse = new ApiResponse();
+    public ResponseEntity<CommonResponse> handleException(TaskNotFoundException exception) {
+        CommonResponse apiResponse = new CommonResponse();
         apiResponse.setMessage(exception.getMessage());
         apiResponse.setData(exception);
         apiResponse.setStatus(ApiStatus.REJECTED);
@@ -23,8 +23,8 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse> handleException(Exception exception) {
-        ApiResponse apiResponse = new ApiResponse();
+    public ResponseEntity<CommonResponse> handleException(Exception exception) {
+        CommonResponse apiResponse = new CommonResponse();
         apiResponse.setMessage(exception.getMessage());
         apiResponse.setData(exception);
         apiResponse.setStatus(ApiStatus.REJECTED);
