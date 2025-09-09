@@ -1,14 +1,12 @@
 package com.taskmanagement.salesflowx.service;
 
 
+import com.taskmanagement.salesflowx.dto.TaskDTO;
 import com.taskmanagement.salesflowx.entity.Task;
 import com.taskmanagement.salesflowx.repository.TaskRepository;
-import com.taskmanagement.salesflowx.utils.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,12 +16,12 @@ public class TaskService {
     @Autowired
     private TaskRepository taskRepository;
 
-    public Task createTask(Task task){
-        if(task.getStatus() == null){
-            task.setStatus(Status.PENDING);
-        }
-        task.setCreatedAt(new Date());
-        return taskRepository.save(task);
+    public Task createTask(TaskDTO task){
+        Task newTask = new Task();
+        newTask.setTitle(task.getTitle());
+        newTask.setDescription(task.getDescription());
+        newTask.setStatus(task.getStatus());
+        return taskRepository.save(newTask);
     }
 
     public List<Task> getAllTasks(){
@@ -37,7 +35,7 @@ public class TaskService {
         return taskRepository.findById(id);
     }
 
-    public Task updateTaskById(String id, Task task){
+    public Task updateTaskById(String id, TaskDTO task){
         if(id == null){
             return null;
         }
@@ -52,14 +50,14 @@ public class TaskService {
 
     }
 
-    public void deleteTaskById(String id){
-        if(id == null){
-            return;
+    public boolean deleteTaskById(String id) {
+        if (!taskRepository.existsById(id)) {
+            return false;
         }
         taskRepository.deleteById(id);
-
-
+        return true;
     }
+
 
 
 }
