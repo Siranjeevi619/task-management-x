@@ -5,16 +5,17 @@ import com.taskmanagement.salesflowx.entity.Task;
 import com.taskmanagement.salesflowx.service.TaskService;
 import com.taskmanagement.salesflowx.utils.ApiStatus;
 import com.taskmanagement.salesflowx.utils.CommonResponse;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -75,25 +76,28 @@ public class TaskController {
 //            @ApiResponse(responseCode = "200", description = "Tasks fetched successfully"),
 //            @ApiResponse(responseCode = "204", description = "No tasks found")
 //    })
-
-
     @GetMapping("/tasks")
-    public ResponseEntity<CommonResponse> getAllTasks(HttpServletRequest request) {
+    public ResponseEntity<CommonResponse> getAllTasks(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "100") int size,
+            HttpServletRequest request) {
         try {
             CommonResponse apiResponse = new CommonResponse();
-            List<Task> tasks = taskService.getAllTasks();
+            Page<Task> taskPage = taskService.getTasks(page, size);
 
-            if (tasks.isEmpty()) {
+            if (taskPage.isEmpty()) {
                 apiResponse.setMessage("No tasks found");
                 apiResponse.setStatus(ApiStatus.REJECTED);
                 apiResponse.setApi(request.getRequestURI());
                 return new ResponseEntity<>(apiResponse, HttpStatus.NO_CONTENT);
             }
 
-            apiResponse.setData(tasks);
-            apiResponse.setApi(request.getRequestURI());
-            apiResponse.setStatus(ApiStatus.SUCCESS);
+            apiResponse.setData(taskPage.getContent());
             apiResponse.setMessage("Tasks fetched successfully");
+            apiResponse.setStatus(ApiStatus.SUCCESS);
+            apiResponse.setApi(request.getRequestURI());
+            apiResponse.setMessage("Tasks fetched successfully. Page: " + page + " / Total Pages: " + taskPage.getTotalPages());
+
             return new ResponseEntity<>(apiResponse, HttpStatus.OK);
 
         } catch (Exception e) {
@@ -104,7 +108,6 @@ public class TaskController {
             );
         }
     }
-
 //    @Operation(summary = "Get a task by ID")
 //    @ApiResponses(value = {
 //            @ApiResponse(responseCode = "200", description = "Task found"),

@@ -6,6 +6,9 @@ import com.taskmanagement.salesflowx.entity.Task;
 import com.taskmanagement.salesflowx.exception.TaskNotFoundException;
 import com.taskmanagement.salesflowx.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -59,7 +62,12 @@ public class TaskService {
         }
         taskRepository.deleteById(id);
         return true;
+    }
 
+
+    public Page<Task> getTasks(int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        return taskRepository.findAll(pageable);
     }
 
 
