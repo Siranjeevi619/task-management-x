@@ -93,8 +93,7 @@ public class TaskController {
     @GetMapping("/tasks/{id}")
     public ResponseEntity<ApiResponse> getTaskById(@PathVariable String id, HttpServletRequest request) {
         try {
-            Task task = taskService.getTaskById(id)
-                    .orElseThrow(() -> new RuntimeException("Task not found with id " + id));
+            Task task = taskService.getTaskById(id);
 
             ApiResponse apiResponse = new ApiResponse();
             apiResponse.setMessage("Task found");

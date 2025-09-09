@@ -3,6 +3,7 @@ package com.taskmanagement.salesflowx.service;
 
 import com.taskmanagement.salesflowx.dto.TaskDTO;
 import com.taskmanagement.salesflowx.entity.Task;
+import com.taskmanagement.salesflowx.exception.TaskNotFoundException;
 import com.taskmanagement.salesflowx.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,18 +29,18 @@ public class TaskService {
         return taskRepository.findAll();
     }
 
-    public Optional<Task> getTaskById(String id){
+    public Task getTaskById(String id){
         if(id == null){
             return null;
         }
-        return taskRepository.findById(id);
+        return taskRepository.findById(id).orElseThrow(() -> new TaskNotFoundException("Task Not Found With "+id));
     }
 
     public Task updateTaskById(String id, TaskDTO task){
         if(id == null){
             return null;
         }
-        Task found = taskRepository.findById(id).orElse(null);
+        Task found = taskRepository.findById(id).orElseThrow(() -> new TaskNotFoundException("Task Not Found With "+id));
         if(found == null){
             return null;
         }
@@ -50,12 +51,15 @@ public class TaskService {
 
     }
 
+
+
     public boolean deleteTaskById(String id) {
         if (!taskRepository.existsById(id)) {
-            return false;
+           throw new  TaskNotFoundException("Task Not Found With "+id);
         }
         taskRepository.deleteById(id);
         return true;
+
     }
 
 
