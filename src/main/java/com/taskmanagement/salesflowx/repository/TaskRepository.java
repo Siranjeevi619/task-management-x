@@ -1,9 +1,11 @@
-package com.taskmanagement.salesflowx.Repository;
+package com.taskmanagement.salesflowx.repository;
 
 import com.taskmanagement.salesflowx.entity.Task;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
+
+@Repository
 public interface TaskRepository extends MongoRepository<Task,String> {
 
 }
