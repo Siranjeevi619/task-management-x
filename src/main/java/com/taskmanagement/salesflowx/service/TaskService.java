@@ -70,6 +70,4 @@ public class TaskService {
         return taskRepository.findAll(pageable);
     }
 
-
-
 }

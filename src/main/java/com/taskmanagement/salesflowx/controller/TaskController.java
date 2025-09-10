@@ -78,7 +78,7 @@ public class TaskController {
 //            @ApiResponse(responseCode = "204", description = "No tasks found")
 //    })
 
-    @PreAuthorize("hasAnyRole('USER','STAFF')")
+    @PreAuthorize("hasAnyRole('USER')")
     @GetMapping("/tasks")
     public ResponseEntity<CommonResponse> getAllTasks(
             @RequestParam(defaultValue = "0") int page,
