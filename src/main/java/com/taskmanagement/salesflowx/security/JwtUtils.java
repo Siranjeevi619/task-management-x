@@ -1,37 +1,53 @@
 package com.taskmanagement.salesflowx.security;
 
-
+import com.taskmanagement.salesflowx.entity.User;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.security.core.userdetails.UserDetails;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.crypto.SecretKey;
 import java.util.Date;
 
 @Component
 public class JwtUtils {
-    private String secret = "asdfghjkl";
-    private int jwtExpirationInSeconds = 86400000;
 
+    private final SecretKey secretKey;
+    private final int jwtExpirationInMillis = 86400000;
 
-    public String generateToken(UserDetails userDetails) {
+    public JwtUtils(@Value("${jwt.secret}") String base64Secret) {
+        byte[] keyBytes = Decoders.BASE64.decode(base64Secret);
+        this.secretKey = Keys.hmacShaKeyFor(keyBytes);
+    }
+
+    public String generateToken(User user) {
         return Jwts.builder()
-                .setSubject(userDetails.getUsername())
+                .setSubject(user.getEmail())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationInSeconds))
-                .signWith(SignatureAlgorithm.HS256, secret)
+                .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationInMillis))
+                .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
     }
 
     public String getUsernameFromToken(String token) {
-        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
+        return Jwts.parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
     }
 
     public boolean validateToken(String token) {
-        try{
-            Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
+        try {
+            Jwts.parserBuilder()
+                    .setSigningKey(secretKey)
+                    .build()
+                    .parseClaimsJws(token);
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
