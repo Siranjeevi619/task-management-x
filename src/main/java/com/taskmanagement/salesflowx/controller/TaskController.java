@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -76,6 +77,8 @@ public class TaskController {
 //            @ApiResponse(responseCode = "200", description = "Tasks fetched successfully"),
 //            @ApiResponse(responseCode = "204", description = "No tasks found")
 //    })
+
+    @PreAuthorize("hasAnyRole('USER')")
     @GetMapping("/tasks")
     public ResponseEntity<CommonResponse> getAllTasks(
             @RequestParam(defaultValue = "0") int page,

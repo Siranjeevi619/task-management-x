@@ -31,7 +31,6 @@ class TaskServiceTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-
         task = new Task();
         task.setId("1");
         task.setTitle("Test Task");
@@ -48,9 +47,7 @@ class TaskServiceTest {
         dto.setStatus(Status.PENDING);
 
         when(taskRepository.save(any(Task.class))).thenAnswer(invocation -> invocation.getArgument(0));
-
         Task savedTask = taskService.createTask(dto);
-
         assertNotNull(savedTask);
         assertEquals("New Task", savedTask.getTitle());
         assertEquals(Status.PENDING, savedTask.getStatus());
@@ -61,11 +58,8 @@ class TaskServiceTest {
     void testGetAllTasks() {
         Task t1 = new Task("1", "Task 1", "Desc1", Status.PENDING, new Date(), null);
         Task t2 = new Task("2", "Task 2", "Desc2", Status.IN_PROGRESS, new Date(), null);
-
         when(taskRepository.findAll()).thenReturn(Arrays.asList(t1, t2));
-
         List<Task> tasks = taskService.getAllTasks();
-
         assertEquals(2, tasks.size());
         verify(taskRepository, times(1)).findAll();
     }
@@ -73,9 +67,7 @@ class TaskServiceTest {
     @Test
     void testGetTaskById_Found() {
         when(taskRepository.findById("1")).thenReturn(java.util.Optional.of(task));
-
         Task result = taskService.getTaskById("1");
-
         assertNotNull(result);
         assertEquals("Test Task", result.getTitle());
         verify(taskRepository, times(1)).findById("1");
