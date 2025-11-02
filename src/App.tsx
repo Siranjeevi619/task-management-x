@@ -26,7 +26,7 @@ export default function App() {
         <ScrollToTop />
         <Routes>
           {/* Dashboard Layout */}
-          <Route path="/TailAdmin/" element={<AppLayout />}>
+          <Route path="/" element={<AppLayout />}>
             <Route index element={<Home />} />
 
             {/* Others Page */}
