@@ -18,6 +18,10 @@ import Blank from "./pages/Blank";
 import AppLayout from "./layout/AppLayout";
 import { ScrollToTop } from "./components/common/ScrollToTop";
 import Home from "./pages/Dashboard/Home";
+import CurrentTask from "./pages/Dashboard/CurrentTask";
+import PendingTask from "./pages/Dashboard/PendingTask";
+import CompletedTask from "./pages/Dashboard/CompletedTask";
+import NotesPage from "./pages/Notes";
 
 export default function App() {
   return (
@@ -33,6 +37,10 @@ export default function App() {
             <Route path="profile" element={<UserProfiles />} />
             <Route path="calendar" element={<Calendar />} />
             <Route path="blank" element={<Blank />} />
+            <Route path="current-task" element={<CurrentTask />} />
+            <Route path="pending-task" element={<PendingTask />} />
+            <Route path="completed-task" element={<CompletedTask />} />
+            <Route path="notes" element={<NotesPage />} />
 
             {/* Forms */}
             <Route path="form-elements" element={<FormElements />} />

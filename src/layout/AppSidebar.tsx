@@ -14,8 +14,10 @@ import {
   TableIcon,
   UserCircleIcon,
 } from "../icons";
+// import {C} from "lucide-react";
 import { useSidebar } from "../context/SidebarContext";
 import SidebarWidget from "./SidebarWidget";
+import { Book } from "lucide-react";
 
 type NavItem = {
   name: string;
@@ -28,7 +30,11 @@ const navItems: NavItem[] = [
   {
     icon: <GridIcon />,
     name: "Dashboard",
-    subItems: [{ name: "Ecommerce", path: "#!", pro: false }],
+    subItems: [
+      { name: "Current Task", path: "current-task", pro: false },
+      { name: "Pending Task", path: "pending-task", pro: false },
+      { name: "Completed Task", path: "completed-task", pro: false },
+    ],
   },
   {
     icon: <CalenderIcon />,
@@ -40,11 +46,7 @@ const navItems: NavItem[] = [
     name: "User Profile",
     path: "profile",
   },
-  {
-    name: "Forms",
-    icon: <ListIcon />,
-    subItems: [{ name: "Form Elements", path: "form-elements", pro: false }],
-  },
+  { name: "Notes", icon: <ListIcon />, path: "notes" },
   {
     name: "Tables",
     icon: <TableIcon />,
@@ -302,7 +304,7 @@ const AppSidebar: React.FC = () => {
           !isExpanded && !isHovered ? "lg:justify-center" : "justify-start"
         }`}
       >
-        <Link to="/TailAdmin/">
+        <Link to="/">
           {isExpanded || isHovered || isMobileOpen ? (
             <>
               <img
